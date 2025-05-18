@@ -47,10 +47,6 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-echo -e "\n${COLOR_CYAN}${SECTION_BREAK}"
-echo "           Hostname Configuration"
-echo -e "${SECTION_BREAK}${COLOR_RESET}"
-
 # Hostname Configuration
 echo -e "\n${COLOR_CYAN}${SECTION_BREAK}"
 echo "           Hostname Configuration"
