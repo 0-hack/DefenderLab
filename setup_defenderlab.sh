@@ -28,7 +28,7 @@ read -p "Enter the iframe source URL for the webtop [default: http://localhost:3
 IFRAME_SRC=${IFRAME_SRC:-http://localhost:3000}
 
 # Validate URL format
-if [[ ! "$IFRAME_SRC" =~ ^https?://[^\s]+$ ]]; then
+if [[ ! "$IFRAME_SRC" =~ ^https?://[^ ]+$ ]]; then
     print_error "Invalid URL format. Must include http:// or https:// and no spaces"
     exit 1
 fi
