@@ -19,6 +19,17 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
+# Check for Docker requirements
+if ! command -v docker >/dev/null 2>&1; then
+    echo "Error: Docker is required but not installed. Please install Docker first."
+    exit 1
+fi
+
+if ! docker compose version >/dev/null 2>&1; then
+    echo "Error: Docker Compose plugin is required. Please install Docker Compose V2."
+    exit 1
+fi
+
 # Copy files if not already in /opt/DefenderLab
 if [ ! -d "$INSTALL_DIR" ]; then
     echo "Copying DefenderLab files to $INSTALL_DIR ..."
@@ -60,11 +71,16 @@ systemctl restart webtop-control
 echo "Systemd service installed and started."
 
 # Update iframe src in index.html
-if grep -q '<iframe[^>]*id="mainFrame"' "$INDEX_HTML"; then
-    sed -i "s|<iframe[^>]*id=\"mainFrame\"[^>]*src=\"[^"]*\"|<iframe id=\"mainFrame\" src=\"$IFRAME_SRC\"|" "$INDEX_HTML"
+ESCAPED_SRC=$(sed -e 's/[\/&]/\\&/g' <<< "$IFRAME_SRC")
+if grep -q 'src="__IFRAME_SRC_PLACEHOLDER__"' "$INDEX_HTML"; then
+    sed -i.bak "s|src=\"__IFRAME_SRC_PLACEHOLDER__\"|src=\"${ESCAPED_SRC}\"|g" "$INDEX_HTML"
     echo "Updated iframe src in index.html to $IFRAME_SRC"
 else
-    echo "iframe tag with id=mainFrame not found in $INDEX_HTML. Please update manually."
+    echo "Placeholder not found in $INDEX_HTML. Please update manually."
 fi
+
+# Start Docker containers
+echo "Starting Docker containers in $INSTALL_DIR..."
+cd "$INSTALL_DIR" && docker compose up -d
 
 echo "Defender Lab setup completed! Open your browser to access the web interface."
