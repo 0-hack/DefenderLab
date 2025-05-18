@@ -23,7 +23,7 @@ echo -e "${SECTION_BREAK}${COLOR_RESET}\n"
 
 # Improved iframe URL prompt
 echo -e "Webtop typically runs on port ${COLOR_CYAN}3000${COLOR_RESET} (default)."
-echo -e "If using a remote server, include the full address (e.g.: ${COLOR_CYAN}http://your-domain.com:3000${COLOR_RESET})"
+echo -e "If using a remote server, include the full address (e.g.: ${COLOR_CYAN}http://your-domain.com:3000${COLOR_RESET} or http://your-domain.com if your port is indicated behind your public domain)"
 read -p "Enter the iframe source URL for the webtop [default: http://localhost:3000]: " IFRAME_SRC
 IFRAME_SRC=${IFRAME_SRC:-http://localhost:3000}
 
