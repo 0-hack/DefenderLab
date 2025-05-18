@@ -47,6 +47,44 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
+echo -e "\n${COLOR_CYAN}${SECTION_BREAK}"
+echo "           Hostname Configuration"
+echo -e "${SECTION_BREAK}${COLOR_RESET}"
+
+# Hostname Configuration
+echo -e "\n${COLOR_CYAN}${SECTION_BREAK}"
+echo "           Hostname Configuration"
+echo -e "${SECTION_BREAK}${COLOR_RESET}"
+
+print_status "Configuring system hostname resolution..."
+CURRENT_HOSTNAME=$(hostname)
+HOSTS_LINE="127.0.0.1       localhost ${CURRENT_HOSTNAME}"
+
+# Check if hostname already exists in hosts file
+if ! grep -qE "127.0.0.1.*${CURRENT_HOSTNAME}" /etc/hosts && \
+   ! grep -qE "127.0.1.1.*${CURRENT_HOSTNAME}" /etc/hosts; then
+    
+    # Backup original hosts file
+    cp /etc/hosts /etc/hosts.bak
+    
+    # Append to existing 127.0.0.1 line or create new line
+    if grep -q "^127.0.0.1" /etc/hosts; then
+        sed -i "/^127.0.0.1/s/$/ ${CURRENT_HOSTNAME}/" /etc/hosts
+    else
+        sed -i "1i${HOSTS_LINE}" /etc/hosts
+    fi
+    
+    print_success "Added hostname '${CURRENT_HOSTNAME}' to /etc/hosts"
+else
+    print_status "Hostname already configured - skipping"
+fi
+
+# Verify configuration
+if ! grep -qE "127.0.[01].1.*${CURRENT_HOSTNAME}" /etc/hosts; then
+    print_warning "Hostname configuration incomplete. Manual check recommended:"
+    echo -e "Add this line to /etc/hosts:\n${COLOR_CYAN}${HOSTS_LINE}${COLOR_RESET}"
+fi
+
 # File System Setup
 echo -e "\n${COLOR_CYAN}${SECTION_BREAK}"
 echo "           File System Setup"
