@@ -1,5 +1,5 @@
 # Defender Lab
-This is a simple web interface for recreating your [webtop](https://docs.linuxserver.io/images/docker-webtop/) Docker container via a sidebar. For now, it's ideal for users who need to quickly check a suspicious website or verify unknown file/tool in an isolated Linux environment (without addition container platform/backend CLI), and then revert to a clean state afterward. 
+This is a simple web interface for recreating your [webtop](https://docs.linuxserver.io/images/docker-webtop/) Docker container via a sidebar. For now, it's ideal for users who need to quickly check a suspicious website or verify unknown file/tool in an isolated Linux environment (without using container platform/backend CLI), and then revert to a clean state afterward. 
 
 Why not [KasmWeb](https://www.kasmweb.com)? This web interface is a lightweight solution built specifically for quickly launching and resetting a Webtop container. It’s ideal for users who want a fast, simple way to check websites or content in an isolated environment without the complexity or setup. 
 *I'm still a fan of Kasm, but it would be nice if it's fully free (to support personalize logo and multiple user session).*
