@@ -2,7 +2,19 @@
 # Defender Lab Setup Script
 set -e
 
-# ... (keep color definitions and output functions from previous version)
+# Output formatting
+COLOR_GREEN='\033[0;32m'
+COLOR_RED='\033[0;31m'
+COLOR_CYAN='\033[0;36m'
+COLOR_YELLOW='\033[1;33m'
+COLOR_RESET='\033[0m'
+SECTION_BREAK="================================================================"
+
+# Output functions (MUST COME FIRST)
+print_status() { echo -e "${COLOR_CYAN}[STATUS]${COLOR_RESET} $1"; }
+print_success() { echo -e "${COLOR_GREEN}[SUCCESS]${COLOR_RESET} $1"; }
+print_error() { echo -e "${COLOR_RED}[ERROR]${COLOR_RESET} $1"; }
+print_warning() { echo -e "${COLOR_YELLOW}[WARNING]${COLOR_RESET} $1"; }
 
 # Initialization
 echo -e "\n${COLOR_CYAN}${SECTION_BREAK}"
