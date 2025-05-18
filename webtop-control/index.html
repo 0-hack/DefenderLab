@@ -14,6 +14,8 @@
         }
         
         #sidebar img {
+        margin-left: -5px; 
+        margin-top: -5px; 
         width: 50px;
         height: 50px;
         object-fit: cover;
@@ -127,8 +129,7 @@
 </head>
 <body>
     <div id="sidebar">
-        <img src="img/DefenderLab%20Logo.png" alt="Defender Lab Logo" style="width: 100%; max-width: 150px; margin-bottom: 20px; display: block; border-radius: 8px;">
-        <button class="control-btn" id="resetBtn" onclick="resetWebtop()">Reset Machine</button>
+<img src="img/DefenderLab%20Logo.png" alt="Defender Lab Logo" style="width: 50px; height: 50px; object-fit: cover; margin: 5px 0 10px 0; display: block; border-radius: 8px;">        <button class="control-btn" id="resetBtn" onclick="resetWebtop()">Reset Machine</button>
         <button class="control-btn" id="refreshBtn" onclick="refreshFrame()">Refresh Machine</button>
         <div id="status"></div>
     </div>
