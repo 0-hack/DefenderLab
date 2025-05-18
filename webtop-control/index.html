@@ -117,13 +117,6 @@
         button:hover {
             filter: brightness(0.9);
         }
-        
-        #status {
-            color: white;
-            font-size: 14px;
-            word-wrap: break-word;
-            margin-top: auto;
-        }
     </style>
 </head>
 <body>
@@ -132,7 +125,24 @@
         <button class="control-btn" id="refreshBtn" onclick="refreshFrame()">Refresh Machine</button>
         <div id="status"></div>
     </div>
-    
+    <style>
+    #status {
+        color: white;
+        font-size: 14px;
+        word-wrap: break-word;
+        margin: 15px 0;  /* Added vertical spacing */
+        padding: 10px;
+        background: #ffffff15;
+        border-radius: 4px;
+        max-height: 150px;  /* Limit height with scroll */
+        overflow-y: auto;
+    }
+
+    #sidebar {
+        /* Add this to support scrolling */
+        overflow: hidden auto;
+    }
+    </style>
     <div id="content">
         <iframe id="mainFrame" src="__IFRAME_SRC_PLACEHOLDER__"></iframe>
     </div>
