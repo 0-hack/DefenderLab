@@ -23,7 +23,8 @@ Support my work by buying a VPS from RackNerd at https://my.racknerd.com/aff.php
 2. **Run the Setup Script**
    ```bash
    cd /path/to/DefenderLab
-   sudo bash setup_defenderlab.sh
+   chmod +x setup_defenderlab.sh
+   ./setup_defenderlab.sh
    ```
    - You will be prompted for the webtop docker's source URL for the Defender Lab's website iframe.
    - **If you are not exposing your server IP/domain for your webtop Docker container, just press Enter to use the default (`http://localhost:3000`).**
@@ -55,6 +56,13 @@ Support my work by buying a VPS from RackNerd at https://my.racknerd.com/aff.php
   ```
 
 ---
+
+## Security
+- Set up a firewall or third-party access control if you plan to expose this publicly.
+- If you're using Cloudflare Tunnel, you can implement an access policy to restrict access to your domain. However, on cloud servers, your public IP remains exposed.
+- Ensure your firewall is configured to block direct access via the server’s IP address.
+- You can run setup_defenderlab.sh to allow only localhost access (compatible with Cloudflare Tunnel) and deny all external traffic to ports like 3000 and 5000. Remember to change the port detail on your docker-compose.yaml from "3000:3000" to "127.0.0.1:3000:3000"
+- SSH (port 22) remains open in this firewall rule to retain remote access.
 
 ## Notes
 - This project is under active development. More features and improvements will be added as time permits.
