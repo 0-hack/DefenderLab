@@ -64,8 +64,8 @@ OR you may also buy me a coffee over https://buymeacoffee.com/zerohack
 ## Security
 - Set up a firewall or third-party access control if you plan to expose this web interface publicly.
 - If you're using Cloudflare Tunnel, you can implement an access policy to restrict access to your domain. However, on cloud servers, your public IP remains exposed.
-- Ensure your firewall is configured to block direct access via the server’s IP address.
-- You can run setup_defenderlab.sh to allow only localhost access (compatible with Cloudflare Tunnel) and deny all external traffic to ports like 3000 and 5000. Remember to change the port detail on your docker-compose.yaml from "3000:3000" to "127.0.0.1:3000:3000"
+- Ensure your firewall (ufw) and iptables is configured to block/prevent direct access via the server’s IP address.
+- You can run setup_rules.sh to allow only localhost (127.0.0.1:5000) access (compatible with Cloudflare Tunnel) and deny all external traffic to ports 3000 (webtop) and 5000 (webtop-control). Remember to change the port detail on your docker-compose.yaml from "3000:3000" to "127.0.0.1:3000:3000" for this setup.
 - SSH (port 22) remains open in this firewall rule to retain remote access.
 
 ## Notes
