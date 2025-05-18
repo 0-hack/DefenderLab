@@ -181,7 +181,10 @@
                 const data = await response.json();
                 if (data.success) {
                     status.textContent = 'Machine reset successful! Output: ' + data.output;
-                    refreshFrame();
+                    // Auto-refresh after 3 second
+                    setTimeout(() => {
+                        refreshFrame();
+                    }, 3000);
                 } else {
                     status.textContent = 'Error: ' + data.error;
                 }
