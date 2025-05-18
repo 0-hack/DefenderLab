@@ -73,6 +73,10 @@ else
     print_error "Failed to set permissions"
     exit 1
 fi
+print_status "Setting image permissions..."
+mkdir -p "$INSTALL_DIR/webtop-control/img"
+chmod -R 755 "$INSTALL_DIR/webtop-control/img"
+find "$INSTALL_DIR/webtop-control/img" -type f -exec chmod 644 {} \;
 
 # Dependency Installation
 echo -e "\n${COLOR_CYAN}${SECTION_BREAK}"
