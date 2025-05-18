@@ -222,32 +222,6 @@ else
     exit 1
 fi
 
-# Final Configuration
-echo -e "\n${COLOR_CYAN}${SECTION_BREAK}"
-echo "           Final Configuration"
-echo -e "${SECTION_BREAK}${COLOR_RESET}"
-
-print_status "Updating iframe source..."
-if [ -f "$INDEX_HTML" ]; then
-    if grep -q 'src="__IFRAME_SRC_PLACEHOLDER__"' "$INDEX_HTML"; then
-        ESCAPED_SRC=$(sed -e 's/[\/&]/\\&/g' <<< "$IFRAME_SRC")
-        sed -i.bak "s|src=\"__IFRAME_SRC_PLACEHOLDER__\"|src=\"${ESCAPED_SRC}\"|g" "$INDEX_HTML"
-        
-        if grep -q "src=\"${IFRAME_SRC}\"" "$INDEX_HTML"; then
-            print_success "iframe source updated to:"
-            echo -e "${COLOR_CYAN}${IFRAME_SRC}${COLOR_RESET}"
-        else
-            print_error "Replacement failed - check URL special characters"
-        fi
-    else
-        print_warning "Placeholder not found in index.html"
-    fi
-else
-    print_error "index.html missing at ${INDEX_HTML}"
-fi
-
-# ... (keep docker setup section)
-
 # Enhanced completion message
 echo -e "\n${COLOR_GREEN}${SECTION_BREAK}"
 echo "           Setup Completed Successfully!"
