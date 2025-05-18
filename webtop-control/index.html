@@ -2,7 +2,6 @@
 <html>
 <head>
     <link rel="icon" type="image/png" href="/img/DefenderLab%20Logo.png">
-
     <title>Defender Lab</title>
     <style>
         body {
@@ -13,18 +12,33 @@
             overflow: hidden;
         }
         
+        /* Added sidebar header styling */
+        #sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 5px 0 15px 0;
+        }
+
+        #sidebar-title {
+            color: white;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin: 0;
+        }
+
         #sidebar img {
-        margin-left: -5px; 
-        margin-top: -5px; 
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-bottom: 10px;
-        border: none !important; /* Remove any inherited borders */
-        outline: none !important; /* Remove focus outlines */
-        box-shadow: none !important; /* Remove any shadow effects */
-        background: #2c3e50; /* Match sidebar background color */
+            margin-left: -5px; 
+            margin-top: -5px; 
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            padding: 1px;
+            background: #2c3e50;
         }
         
         #sidebar {
@@ -47,20 +61,23 @@
             transform: translateX(-100%);
         }
         
+        /* Modified content area for proper resizing */
         #content {
             height: 100vh;
             margin-left: 200px;
             transition: margin-left 0.3s ease;
+            width: calc(100% - 200px);
         }
         
         #sidebar.collapsed + #content {
             margin-left: 0;
+            width: 100%;
         }
         
         #toggleButton {
             position: fixed;
-            left: 230px;
-            top: 20px;
+            left: 200px;
+            top: 10px;
             width: 30px;
             height: 40px;
             background: rgba(44, 62, 80, 0.8);
@@ -117,32 +134,64 @@
         button:hover {
             filter: brightness(0.9);
         }
+        
+        #status-title {
+            color: white;
+            font-size: 1.1em;
+            margin: 5px 0 5px 0;
+            padding: 0 5px;
+            font-family: Arial, sans-serif;
+        }
+        #status {
+            color: white;
+            font-size: 14px;
+            word-wrap: break-word;
+            margin: 15px 0;
+            padding: 10px;
+            background: #ffffff15;
+            border-radius: 4px;
+            max-height: 150px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        .status-message {
+            padding: 5px 0;
+            border-bottom: 1px solid #ffffff20;
+            color: #ecf0f1;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .status-message:last-child {
+            border-bottom: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
     <div id="sidebar">
-<img src="img/DefenderLab%20Logo.png" alt="Defender Lab Logo" style="width: 50px; height: 50px; object-fit: cover; margin: 5px 0 10px 0; display: block; border-radius: 8px;">        <button class="control-btn" id="resetBtn" onclick="resetWebtop()">Reset Machine</button>
-        <button class="control-btn" id="refreshBtn" onclick="refreshFrame()">Refresh Machine</button>
-        <div id="status"></div>
-    </div>
-    <style>
-    #status {
-        color: white;
-        font-size: 14px;
-        word-wrap: break-word;
-        margin: 15px 0;  /* Added vertical spacing */
-        padding: 10px;
-        background: #ffffff15;
-        border-radius: 4px;
-        max-height: 150px;  /* Limit height with scroll */
-        overflow-y: auto;
-    }
+        <!-- Added header with title -->
+        <div id="sidebar-header">
+            <img src="img/DefenderLab%20Logo.png" alt="Defender Lab Logo" 
+                 style="width: 50px; height: 50px; object-fit: cover; margin: 1px 0; display: block; border-radius: 8px;">
+            <h1 id="sidebar-title">Defender Lab</h1>
+        </div>
+        
+        <button class="control-btn" id="resetBtn" onclick="resetWebtop()">Reset Machine</button>
+        <button class="control-btn" id="refreshBtn" onclick="refreshFrame()">Refresh iFrame</button>
 
-    #sidebar {
-        /* Add this to support scrolling */
-        overflow: hidden auto;
-    }
-    </style>
+        <div id="status-container">
+            <h3 id="status-title">System Events</h3>
+            <div id="status"></div>
+        </div>
+    </div>
+
     <div id="content">
         <iframe id="mainFrame" src="__IFRAME_SRC_PLACEHOLDER__"></iframe>
     </div>
@@ -150,8 +199,35 @@
     <button id="toggleButton" onclick="toggleSidebar()">❮</button>
 
     <script>
+        // Timestamp function
+        function getTimestamp() {
+            const now = new Date();
+            return now.toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+
+        let statusHistory = [];
         let sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-        
+        const iframe = document.getElementById('mainFrame');
+
+        function addStatusMessage(text) {
+            const status = document.getElementById('status');
+            const fullMessage = `${getTimestamp()}: ${text}`;
+            
+            statusHistory.push(fullMessage);
+            if (statusHistory.length > 20) statusHistory.shift();
+            
+            status.innerHTML = statusHistory.map(msg => 
+                `<div class="status-message">${msg}</div>`
+            ).reverse().join('');
+            
+            status.scrollTop = status.scrollHeight;
+        }
+
         function initializeSidebar() {
             const sidebar = document.getElementById('sidebar');
             if (sidebarCollapsed) {
@@ -166,36 +242,29 @@
             sidebar.classList.toggle('collapsed');
         }
 
-        const iframe = document.getElementById('mainFrame');
-        let currentSrc = iframe.src;
-
         async function resetWebtop() {
-            const status = document.getElementById('status');
-            status.textContent = 'Resetting Machine...';
+            addStatusMessage('Resetting Machine...');
             
             try {
-                const response = await fetch('/reset', {
-                    method: 'POST'
-                });
-                
+                const response = await fetch('/reset', { method: 'POST' });
                 const data = await response.json();
+                
                 if (data.success) {
-                    status.textContent = 'Machine reset successful! Output: ' + data.output;
-                    // Auto-refresh after 3 second
+                    addStatusMessage('Machine reset successful! Output: ' + data.output);
                     setTimeout(() => {
                         refreshFrame();
-                    }, 3000);
+                    }, 3000); //sleep for 3 seconds before auto-fresh iframe page. Adjust based on your processing speed to spin up a new webtop.
                 } else {
-                    status.textContent = 'Error: ' + data.error;
+                    addStatusMessage('Error: ' + data.error);
                 }
             } catch (error) {
-                status.textContent = 'Network error: ' + error.message;
+                addStatusMessage('Network error: ' + error.message);
             }
         }
 
         function refreshFrame() {
-            iframe.src = currentSrc + '?t=' + Date.now();
-            document.getElementById('status').textContent = 'Machine refreshed at: ' + new Date().toLocaleTimeString();
+            iframe.src = iframe.src.split('?')[0] + '?t=' + Date.now();
+            addStatusMessage('iFrame Refreshed');
         }
 
         document.addEventListener('DOMContentLoaded', initializeSidebar);
