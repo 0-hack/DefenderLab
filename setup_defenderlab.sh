@@ -83,4 +83,4 @@ fi
 echo "Starting Docker containers in $INSTALL_DIR..."
 cd "$INSTALL_DIR" && docker compose up -d
 
-echo "Defender Lab setup completed! Open your browser to access the web interface."
+echo "Defender Lab setup completed! Verify your access at http://localhost:5000 (default) to access the web interface."
